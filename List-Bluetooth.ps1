@@ -1,0 +1,1 @@
+Get-CimInstance -Query "Select * from Win32_NetworkAdapter" | Where-Object {$_.ProductName -like "*bluetooth*"} | select DeviceId, Availability, Name, AdapterType, PNPDeviceID, MACAddress | Format-Table
