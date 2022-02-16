@@ -64,8 +64,6 @@ Add-Type -AssemblyName System.Windows.Forms
 $screenWidth = [System.Windows.Forms.Screen]::AllScreens[0].Bounds.Width
 
 Invoke-WebRequest $content.urls.raw -Headers $headers -Body @{ fm = "jpg"; w = "$($screenWidth)"; q = "80" } -OutFile "$($env:TEMP)/unsplash.jpg"
-#Invoke-WebRequest "$baseUrl/photos/$($content.id)/download" -Headers $headers
-
 
 $sel = $content | Select-Object   @{n = "Name"; e = { $_.user.name } }, @{n = "Location"; e = { $_.location.title } }, @{n = "Description"; e = { $_.description } }
 
@@ -73,4 +71,9 @@ $sel = $content | Select-Object   @{n = "Name"; e = { $_.user.name } }, @{n = "L
 
 Set-WallPaper "$($env:TEMP)/unsplash.jpg" $Style
 
-& bginfo /timer:0
+
+try {
+    & xbginfo /timer:0
+} catch [System.Management.Automation.CommandNotFoundException] {
+    Write-Host "Install BGInfo from SysInternals to get image information https://docs.microsoft.com/en-us/sysinternals/downloads/bginfo"
+}
